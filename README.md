@@ -103,6 +103,18 @@ Daily Tasks:
 
 ---
 
+# Domain Revision Files
+
+- [Domain 1 — C# Fundamentals](domains/01-csharp-fundamentals.md)
+- [Domain 2 — ASP.NET Core](domains/02-aspnet-core.md)
+- [Domain 4 — SQL](domains/04-sql.md)
+- [Domain 5 — JavaScript](domains/05-javascript.md)
+- [Domain 6 — React](domains/06-react.md)
+- [Domain 7 — Microservices](domains/07-microservices.md)
+- [Domain 12 — Project & Behavioral Stories (STAR)](domains/12-project-stories.md)
+
+---
+
 # Domain 1 — C# Fundamentals
 
 ## Goal
@@ -429,6 +441,12 @@ Defend seniority and ownership.
 
 ---
 
+# Domain 12 — Project & Behavioral Stories (STAR)
+
+[Open the project and behavioral STAR stories](domains/12-project-stories.md)
+
+---
+
 # Priority Order
 
 1. C# Fundamentals
@@ -442,6 +460,7 @@ Defend seniority and ownership.
 9. Kubernetes
 10. Azure
 11. Leadership
+12. Project & Behavioral Stories
 
 ---
 
