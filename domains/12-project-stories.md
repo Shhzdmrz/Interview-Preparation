@@ -3,7 +3,10 @@
 ## How to use this
 - Lead with the one-line **headline**, then give the detail. Stop when answered.
 - For "tell me about a challenging task," use Story 1 or 4.
-- For "tell me about a project," use Story 2 or 3.
+- For "tell me about a project," use Story 3 or 5.
+- For "architecture, scaling, or distributed systems," use Story 2.
+- For "real-time systems or performance," use Story 6.
+- For "leadership," use Story 4.
 - For "what architecture/tools and why," use the Architecture Decisions section.
 - Keep it ~60-90 seconds spoken. Go deeper only if they probe.
 
@@ -73,6 +76,40 @@
 
 ---
 
+## Story 5 — Built a Ride-Sharing Platform from Scratch (zero-to-one + full-stack + mobile)
+
+**Headline:** Built a corporate ride-sharing platform end-to-end, React web app, React Native driver mobile app, and real-time dispatcher communication.
+
+**Situation:** At FMS-Tech, we needed a corporate ride-sharing platform built from the ground up, covering both riders and drivers, with live communication between them and a dispatcher.
+
+**Task:** I built it end-to-end across web, mobile, and the real-time communication layer.
+
+**Action:** I built the rider-facing web app in React and the driver mobile app in React Native, so drivers had a proper native experience on the road. For dispatcher communication I implemented low-latency audio and text using WebRTC together with SignalR, so the dispatcher, drivers, and system could talk in real time. I owned it across the full stack, frontend, mobile, backend services, and the real-time layer.
+
+**Result:** A working corporate ride-sharing platform delivered from scratch, with live driver-dispatcher communication.
+
+**Why React Native:** I needed a real native mobile experience for drivers (background location, responsiveness) without maintaining two separate native codebases, so a single cross-platform codebase made sense for the timeline and team size.
+
+**Why WebRTC + SignalR together:** WebRTC handles the low-latency peer audio; SignalR handles signaling, text messaging, and coordination with the backend. They complement each other, WebRTC for the media stream, SignalR for the messaging and control channel.
+
+---
+
+## Story 6 — Polling to Real-Time SignalR at Scale (real-time + performance)
+
+**Headline:** Rebuilt a vehicle-monitoring dashboard from polling to real-time SignalR streaming, handling hundreds of vehicles live.
+
+**Situation:** The existing fleet dashboard used polling to get vehicle data, which was inefficient and didn't scale well as the number of vehicles grew, the UI lagged and the server took unnecessary load from constant polling.
+
+**Task:** Move it to a real-time model that could handle live GPS and journey data for hundreds of vehicles at once.
+
+**Action:** I rebuilt the dashboard to use SignalR streaming instead of polling, so the server pushes updates to the client only when data changes, rather than the client repeatedly asking. This let us stream live GPS positions and journey management for hundreds of vehicles simultaneously without the overhead of constant polling.
+
+**Result:** Live, real-time fleet monitoring for hundreds of vehicles at once, with far less server load and a responsive UI.
+
+**Why SignalR / push over polling:** Polling wastes resources, every client repeatedly asks even when nothing changed, and it adds latency. A push model (SignalR) sends data only when there's something new, which scales much better for many concurrent live clients and gives a real-time feel.
+
+---
+
 ## Architecture & Tools — What I Used and Why
 
 Use these when asked "why did you choose X?" Interviewers want reasoning, not a tool list.
@@ -93,3 +130,5 @@ Use these when asked "why did you choose X?" Interviewers want reasoning, not a 
 - **Architecture / distributed systems / scaling** → Story 2 (Redis + SignalR)
 - **AI / interesting project** → Story 3 (LLM gateway)
 - **Leadership / hard delivery / challenge** → Story 4 (zero-downtime migration)
+- **Zero-to-one / full-stack / mobile project** → Story 5 (ride-sharing platform)
+- **Real-time / performance** → Story 6 (polling to SignalR)
