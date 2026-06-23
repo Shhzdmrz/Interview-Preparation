@@ -66,6 +66,7 @@ Daily Tasks:
 #### Saturday
 
 * Weak Areas Only
+* Testing and System Design rotation
 
 #### Sunday
 
@@ -119,6 +120,7 @@ Daily Tasks:
 - [Domain 6 — React](domains/06-react.md)
 - [Domain 7 — Microservices](domains/07-microservices.md)
 - [Domain 12 — Project & Behavioral Stories (STAR)](domains/12-project-stories.md)
+- [Domain 14 — Testing & Quality](domains/14-testing-quality.md)
 
 ---
 
@@ -166,7 +168,7 @@ Never fail a basic C# question.
 
 Defend backend experience confidently.
 
-### Topics
+### Core Topics
 
 * [High] Middleware Pipeline
 * [High] Dependency Injection
@@ -208,6 +210,35 @@ Defend backend experience confidently.
 * [High] Correlation IDs
 * [High] Global exception handling with middleware or IExceptionHandler
 
+### Security
+
+* [High] OAuth2 vs OpenID Connect
+* [High] Authorization Code flow with PKCE
+* [High] Client Credentials flow
+* [High] Access tokens vs refresh tokens
+* [High] JWT structure: header, payload, signature
+* [High] JWT signature validation
+* [High] Issuer, audience, lifetime, and signing-key validation
+* [High] Authentication vs authorization
+* [High] Role-based authorization
+* [High] Policy-based authorization
+* [High] Claims-based authorization
+* [High] RBAC vs policy-based authorization
+* [High] Secure secret management
+* [High] OWASP Top 10 fundamentals
+* [High] Preventing SQL injection, XSS, CSRF, and insecure direct object references
+* [Medium] Token revocation and refresh-token rotation
+
+### GraphQL
+
+* [Medium] GraphQL fundamentals
+* [Medium] REST vs GraphQL
+* [Medium] Queries, mutations, and schemas
+* [Medium] GraphQL authorization
+* [Medium] N+1 query problem and DataLoader concept
+* [Medium] GraphQL performance and query-depth risks
+* [High] When not to use GraphQL
+
 ---
 
 # Domain 3 — Entity Framework Core
@@ -240,6 +271,9 @@ Defend backend experience confidently.
 * [Medium] Repository pattern with EF Core
 * [Medium] EF Core inside Clean Architecture
 * [Medium] Domain entities vs database entities
+* [Medium] Dapper fundamentals
+* [Medium] EF Core vs Dapper
+* [Medium] Choosing Dapper for performance-critical queries
 
 ---
 
@@ -413,6 +447,15 @@ Understand distributed systems and communication.
 * [Medium] Topics, partitions, offsets, and consumer groups
 * [Medium] Event retention and replay
 
+### Azure Service Bus
+
+* [Medium] Azure Service Bus fundamentals
+* [Medium] Queues vs topics and subscriptions
+* [Medium] Peek-lock vs receive-and-delete
+* [Medium] Dead-letter queues
+* [Medium] Sessions and ordered processing
+* [Medium] Azure Service Bus vs RabbitMQ vs Kafka
+
 ### API Gateway and YARP
 
 * [High] API Gateway
@@ -465,18 +508,20 @@ Understand distributed systems and communication.
 
 ### Topics
 
-* Pod
-* Deployment
-* ReplicaSet
-* Service
-* Ingress
-* Namespace
-* ConfigMap
-* Secret
-* Persistent Volume
-* Horizontal Pod Autoscaler
-* Rolling Update
-* Self Healing
+* [High] Pod
+* [High] Deployment
+* [High] ReplicaSet
+* [High] Service
+* [High] Ingress
+* [High] Namespace
+* [High] ConfigMap
+* [High] Secret
+* [Medium] Persistent Volume
+* [High] Horizontal Pod Autoscaler
+* [High] Rolling Update
+* [High] Self Healing
+* [Medium] Helm fundamentals
+* [Medium] Helm charts, values, and releases
 
 ### Commands
 
@@ -500,24 +545,55 @@ kubectl apply -f deployment.yaml
 
 ---
 
-# Domain 10 — Azure / Cloud
+# Domain 10 — Azure, DevOps & Observability
 
-### Topics
+## Azure and Cloud
 
-* Azure App Service
-* Azure Key Vault
-* Secret Rotation
-* Azure Storage
-* Blob Storage
-* Azure SQL
-* Managed Identity
-* Azure Kubernetes Service (AKS)
-* Azure Entra ID
-* Azure Redis Cache
-* Application Insights
-* Monitoring
-* Logging
-* CI/CD
+* [High] Azure App Service
+* [High] Azure Key Vault
+* [High] Secret Rotation
+* [High] Azure Storage
+* [High] Blob Storage
+* [High] Azure SQL
+* [High] Managed Identity
+* [High] Azure Kubernetes Service (AKS)
+* [High] Azure Entra ID
+* [High] Azure Redis Cache
+* [High] Application Insights
+* [Medium] Azure Functions
+* [Medium] Infrastructure as Code fundamentals
+* [Medium] Terraform fundamentals
+* [Medium] Bicep fundamentals
+* [Medium] Cloud cost-optimization basics
+
+## CI/CD and Delivery
+
+* [High] CI vs Continuous Delivery vs Continuous Deployment
+* [High] Azure DevOps Pipelines
+* [Medium] GitHub Actions fundamentals
+* [High] Build, test, scan, package, and deploy stages
+* [High] Environment-specific configuration
+* [High] Feature flags
+* [High] Rolling deployment
+* [High] Blue-green deployment
+* [Medium] Canary deployment
+* [High] Rollback strategy
+* [Medium] Quality gates with SonarQube
+
+## Observability
+
+* [High] Logs, metrics, and traces
+* [High] Structured logging
+* [High] Correlation IDs
+* [High] Distributed tracing
+* [High] OpenTelemetry fundamentals
+* [Medium] OpenTelemetry traces, metrics, and exporters
+* [Medium] Prometheus fundamentals
+* [Medium] Grafana dashboards and alerting
+* [Medium] ELK / Elastic Stack fundamentals
+* [High] Health checks vs monitoring
+* [High] Application Insights telemetry
+* [Medium] SLIs, SLOs, and alert thresholds
 
 ---
 
@@ -556,11 +632,11 @@ Defend seniority and ownership.
 
 ---
 
-# Domain 13 — Architecture, DDD, CQRS & Design Patterns
+# Domain 13 — Architecture, DDD, CQRS, Design Patterns & System Design
 
 ## Goal
 
-Understand the architecture concepts used in modern .NET microservice systems without overengineering.
+Understand architecture and system-design concepts used in modern .NET systems without overengineering.
 
 ### Architecture Styles
 
@@ -613,23 +689,71 @@ Understand the architecture concepts used in modern .NET microservice systems wi
 * [High] Dependency Inversion
 * [High] SOLID in real applications
 
+### System Design
+
+* [High] Functional vs non-functional requirements
+* [High] Capacity estimation fundamentals
+* [High] Horizontal vs vertical scaling
+* [High] Load balancing
+* [High] Stateless services
+* [High] Caching strategy and cache invalidation
+* [High] Database replication and read replicas
+* [Medium] Database partitioning and sharding
+* [High] Availability, reliability, and fault tolerance
+* [High] Consistency and eventual consistency
+* [High] CAP theorem fundamentals
+* [High] Rate limiting and backpressure
+* [High] Queues for asynchronous processing
+* [High] Single points of failure
+* [High] Bottleneck identification
+* [High] Failure scenarios and graceful degradation
+* [High] Trade-off communication
+* [Medium] Designing URL shortener, notification, order, and real-time systems
+
+---
+
+# Domain 14 — Testing & Quality
+
+[Open the Testing & Quality domain](domains/14-testing-quality.md)
+
+### High-Priority Summary
+
+* [High] Unit tests vs integration tests vs end-to-end tests
+* [High] Test pyramid
+* [High] Arrange, Act, Assert
+* [High] xUnit fundamentals
+* [High] `[Fact]` vs `[Theory]`
+* [High] Mock, stub, and fake differences
+* [High] Moq or NSubstitute fundamentals
+* [High] What not to mock
+* [High] WebApplicationFactory<TEntryPoint>
+* [High] Testing API endpoints, authentication, and authorization
+* [High] In-memory provider limitations
+* [High] Test-data isolation and cleanup
+* [High] Code review fundamentals
+* [Medium] Testcontainers
+* [Medium] Load, stress, and spike testing
+* [Medium] k6 or JMeter fundamentals
+* [Medium] Static analysis and quality gates
+
 ---
 
 # Priority Order
 
 1. C# Fundamentals
-2. ASP.NET Core
+2. ASP.NET Core and Security
 3. React
 4. JavaScript
 5. EF Core
 6. SQL & Data Storage
 7. Microservices
-8. Architecture, DDD, CQRS & Design Patterns
-9. Docker
-10. Kubernetes
-11. Azure
-12. Leadership
-13. Project & Behavioral Stories
+8. Testing & Quality
+9. Architecture, DDD, CQRS, Design Patterns & System Design
+10. Docker
+11. Kubernetes
+12. Azure, DevOps & Observability
+13. Leadership
+14. Project & Behavioral Stories
 
 ---
 
