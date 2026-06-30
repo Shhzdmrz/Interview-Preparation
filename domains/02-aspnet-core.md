@@ -285,3 +285,303 @@ builder.Services.AddControllers(options =>
 # 15-Second Version
 
 Create filters by implementing the matching sync or async filter interface, or inherit from an attribute such as `ActionFilterAttribute`. Apply them globally, at controller level, or at action level.
+
+---
+
+## Middleware Benefits
+
+# Question
+
+How does middleware enhance .NET applications?
+
+# Senior-Level Answer
+
+Middleware enhances ASP.NET Core applications by providing a clean way to handle cross-cutting concerns in one centralized request pipeline.
+
+Instead of repeating logic in every controller, middleware can handle concerns such as exception handling, authentication, authorization, CORS, logging, correlation IDs, compression, rate limiting, and static file handling.
+
+Middleware also controls request flow. It can run logic before and after the next component, pass the request forward using `next()`, or short-circuit the pipeline when needed, such as returning an unauthorized response before reaching the controller.
+
+# Example
+
+```csharp
+app.UseExceptionHandler("/error");
+app.UseCors("FrontendPolicy");
+app.UseAuthentication();
+app.UseAuthorization();
+```
+
+These middleware components apply consistent behavior across the application.
+
+# 15-Second Version
+
+Middleware centralizes request-level concerns like logging, error handling, CORS, authentication, and authorization. It keeps controllers cleaner and gives control over the request pipeline.
+
+---
+
+## Dependency Injection Role and Benefits
+
+# Question
+
+What is the role of Dependency Injection in an ASP.NET MVC/Core application?
+
+# Senior-Level Answer
+
+Dependency Injection provides required dependencies to a class from the outside instead of letting the class create them directly.
+
+In ASP.NET Core, services are registered in the built-in DI container, and the framework injects them into controllers, services, middleware, filters, and background workers. This reduces tight coupling, improves maintainability, supports SOLID principles, and makes the code easier to test.
+
+Without DI, classes often create their own dependencies using `new`, which makes them harder to replace, mock, or configure.
+
+# Example
+
+```csharp
+public class OrdersController : ControllerBase
+{
+    private readonly IOrderService _orderService;
+
+    public OrdersController(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+}
+```
+
+The controller depends on `IOrderService`, not on a concrete implementation.
+
+# 15-Second Version
+
+DI provides dependencies from outside the class. It reduces coupling, supports SOLID, improves maintainability, and makes services easier to replace and test.
+
+---
+
+## Implementing Dependency Injection
+
+# Question
+
+How is Dependency Injection implemented in ASP.NET Core?
+
+# Senior-Level Answer
+
+In ASP.NET Core, Dependency Injection is implemented using the built-in service container.
+
+Services are registered in `Program.cs` using lifetimes such as Singleton, Scoped, and Transient. Then they are injected through constructors into controllers, services, middleware, filters, or hosted services.
+
+Interfaces are commonly used so the application depends on abstractions instead of concrete classes. This improves flexibility and testability.
+
+# Example
+
+```csharp
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddSingleton<ICacheService, RedisCacheService>();
+builder.Services.AddTransient<IEmailFormatter, EmailFormatter>();
+
+public class OrderController : ControllerBase
+{
+    private readonly IOrderService _orderService;
+
+    public OrderController(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+}
+```
+
+# 15-Second Version
+
+Register services in `Program.cs` with the correct lifetime, usually against interfaces, then inject them through constructors wherever they are needed.
+
+---
+
+## Dependency Injection and Testing
+
+# Question
+
+How does Dependency Injection improve software testing?
+
+# Senior-Level Answer
+
+Dependency Injection improves testing because dependencies can be replaced with mocks, stubs, fakes, or in-memory implementations during tests.
+
+A class that depends on an interface can be tested without calling a real database, external API, file system, or message broker. This makes unit tests faster, more isolated, and more deterministic.
+
+DI also makes integration testing easier because production services can be replaced with test services using the test host or `WebApplicationFactory`.
+
+# Example
+
+```csharp
+var paymentGateway = new Mock<IPaymentGateway>();
+var service = new OrderService(paymentGateway.Object);
+```
+
+The `OrderService` can be tested without calling a real payment provider.
+
+# 15-Second Version
+
+DI makes testing easier because dependencies can be swapped with mocks or fakes. This avoids real databases or external APIs in unit tests and keeps tests isolated.
+
+---
+
+## CORS in ASP.NET Core
+
+# Question
+
+How does CORS work in ASP.NET Core, and why do we use it?
+
+# Senior-Level Answer
+
+CORS stands for Cross-Origin Resource Sharing. It is a browser security mechanism that controls whether a frontend from one origin can call an API hosted on another origin.
+
+An origin is made of scheme, host, and port. For example, `https://app.example.com` calling `https://api.example.com` is a cross-origin request.
+
+CORS is configured on the server. ASP.NET Core returns CORS headers that tell the browser whether the request is allowed. It is commonly needed when a React, Angular, or other frontend application is hosted separately from the API.
+
+CORS is enforced by browsers. It is not an API authentication or authorization mechanism.
+
+# Example
+
+```csharp
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy.WithOrigins("https://app.example.com")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+app.UseCors("FrontendPolicy");
+```
+
+# 15-Second Version
+
+CORS allows or blocks browser calls from one origin to another. ASP.NET Core sends CORS headers, and the browser enforces them. It is used when frontend and API are hosted on different origins.
+
+---
+
+## Configuring CORS
+
+# Question
+
+How do you configure CORS in .NET Core?
+
+# Senior-Level Answer
+
+CORS is configured by registering a policy with `AddCors()` and applying it in the middleware pipeline using `UseCors()`.
+
+For production, specify trusted origins explicitly instead of using `AllowAnyOrigin()`. If credentials such as cookies are used, do not combine `AllowAnyOrigin()` with `AllowCredentials()`.
+
+The CORS middleware should be placed after routing and before authentication/authorization or endpoint execution in a typical ASP.NET Core pipeline.
+
+# Example
+
+```csharp
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy.WithOrigins("https://app.example.com")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+app.UseRouting();
+app.UseCors("FrontendPolicy");
+app.UseAuthentication();
+app.UseAuthorization();
+```
+
+# 15-Second Version
+
+Use `AddCors()` to define a policy and `UseCors()` to apply it. In production, allow only trusted origins and avoid broad wildcard policies.
+
+---
+
+## WCF
+
+# Question
+
+What is WCF?
+
+# Senior-Level Answer
+
+WCF, or Windows Communication Foundation, is a legacy Microsoft framework for building service-oriented applications.
+
+It was commonly used to expose services over different protocols and bindings such as HTTP, TCP, named pipes, and MSMQ. WCF supports SOAP-based services, contracts, bindings, endpoints, security, and transactions.
+
+In modern .NET applications, ASP.NET Core Web API and gRPC are more commonly used for new development. WCF knowledge is still useful when maintaining or migrating older enterprise systems.
+
+# Example
+
+```csharp
+[ServiceContract]
+public interface ICustomerService
+{
+    [OperationContract]
+    CustomerDto GetCustomer(int id);
+}
+```
+
+# 15-Second Version
+
+WCF is a legacy Microsoft framework for service-oriented applications, mainly SOAP and multiple transport protocols. Modern projects usually use ASP.NET Core Web API or gRPC.
+
+---
+
+## Service Contract in WCF
+
+# Question
+
+What is a Service Contract in WCF?
+
+# Senior-Level Answer
+
+A Service Contract defines the operations that a WCF service exposes to clients.
+
+It is usually an interface marked with `[ServiceContract]`. Methods that should be available to clients are marked with `[OperationContract]`. This contract tells clients what service operations exist and how they can call them.
+
+# Example
+
+```csharp
+[ServiceContract]
+public interface IOrderService
+{
+    [OperationContract]
+    OrderDto GetOrder(int id);
+}
+```
+
+`IOrderService` defines the service contract, and `GetOrder` is exposed as an operation.
+
+# 15-Second Version
+
+A WCF Service Contract defines the operations exposed by a service. The interface uses `[ServiceContract]`, and exposed methods use `[OperationContract]`.
+
+---
+
+## WCF vs ASP.NET Web API
+
+# Question
+
+What is the difference between WCF and ASP.NET Web API?
+
+# Senior-Level Answer
+
+WCF is a legacy service framework designed for service-oriented applications, especially SOAP services and multiple transport protocols such as HTTP, TCP, named pipes, and MSMQ.
+
+ASP.NET Web API is designed for building HTTP-based RESTful APIs. It is simpler for web and mobile clients, works naturally with JSON, HTTP verbs, status codes, routing, and modern API practices.
+
+Use WCF mainly when maintaining legacy enterprise systems or when older SOAP-based integrations are required. Use ASP.NET Core Web API for most modern REST API development.
+
+# Example
+
+```text
+WCF: SOAP, contracts, bindings, endpoints, multiple transports
+Web API: REST, HTTP verbs, JSON, status codes, routing
+```
+
+# 15-Second Version
+
+WCF is older and contract/binding-based, often SOAP and multiple protocols. Web API is HTTP/REST-focused, simpler for modern web, mobile, and JSON-based integrations.
