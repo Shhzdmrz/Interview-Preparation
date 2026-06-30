@@ -107,3 +107,99 @@ Returns all users, even users with no orders.
 # 15-Second Version
 
 `INNER JOIN` returns only matching rows from both tables. `LEFT JOIN` returns all rows from the left table and matching rows from the right table, with `NULL` if no match exists.
+
+---
+
+## Index Benefits and Trade-Offs
+
+# Question
+
+How do indexes improve query performance, and what are their benefits?
+
+# Senior-Level Answer
+
+Indexes improve query performance by allowing the database engine to find rows without scanning the entire table.
+
+They are especially useful for columns used in `WHERE`, `JOIN`, `ORDER BY`, and sometimes `GROUP BY` clauses. A good index can reduce I/O, speed up lookups, improve joins, and make sorting more efficient.
+
+The trade-off is that indexes require extra storage and can slow down `INSERT`, `UPDATE`, and `DELETE` operations because the database must maintain the index when data changes.
+
+Indexes should be based on real query patterns, not added blindly.
+
+# Example
+
+```sql
+CREATE INDEX IX_Orders_CustomerId_CreatedDate
+ON Orders (CustomerId, CreatedDate);
+```
+
+This can help queries that filter orders by customer and date.
+
+# 15-Second Version
+
+Indexes speed up reads by helping the database find rows faster, especially for filters, joins, and sorting. The trade-off is extra storage and slower writes.
+
+---
+
+## Clustered vs Non-Clustered Index
+
+# Question
+
+What is the difference between Clustered and Non-Clustered indexes?
+
+# Senior-Level Answer
+
+A clustered index defines the physical or logical order of data rows in a table. Because the table data itself is organized by the clustered index key, a table can have only one clustered index.
+
+A non-clustered index is a separate structure that stores indexed key values with a pointer back to the actual data row. A table can have multiple non-clustered indexes.
+
+Clustered indexes are commonly used on primary keys, but the best key depends on the workload. Non-clustered indexes are useful for frequent search, join, or sorting columns.
+
+# Example
+
+```sql
+-- Clustered index, commonly on primary key
+CREATE CLUSTERED INDEX IX_Orders_Id
+ON Orders (Id);
+
+-- Non-clustered index for search/filter
+CREATE NONCLUSTERED INDEX IX_Orders_CustomerId
+ON Orders (CustomerId);
+```
+
+# 15-Second Version
+
+A clustered index controls the table row order, so there can be only one. A non-clustered index is a separate lookup structure, so a table can have many.
+
+---
+
+## Normalization
+
+# Question
+
+What is normalization, and what is its impact on database design?
+
+# Senior-Level Answer
+
+Normalization is the process of organizing relational database tables to reduce duplication and improve data integrity.
+
+It usually involves splitting data into related tables and connecting them with primary keys and foreign keys. For example, instead of storing customer details repeatedly in every order row, customer data is stored once in a `Customers` table and referenced from `Orders`.
+
+The benefits are less duplication, better consistency, easier updates, and stronger relational design. The trade-off is that highly normalized databases may require more joins, which can make some queries more complex or slower if not indexed properly.
+
+# Example
+
+```text
+Before normalization:
+Orders(OrderId, CustomerName, CustomerEmail, ProductName)
+
+After normalization:
+Customers(CustomerId, Name, Email)
+Orders(OrderId, CustomerId)
+Products(ProductId, Name)
+OrderItems(OrderId, ProductId)
+```
+
+# 15-Second Version
+
+Normalization reduces duplication by splitting data into related tables. It improves consistency and integrity, but can increase joins and query complexity.
