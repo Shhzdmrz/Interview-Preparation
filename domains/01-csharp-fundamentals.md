@@ -257,3 +257,118 @@ A library targeting `netstandard2.0` can be referenced by multiple compatible .N
 # 15-Second Version
 
 .NET Standard is an API specification, not a runtime. It allowed libraries to run across compatible .NET Framework, .NET Core, and Xamarin implementations. Today it is mainly useful for libraries that still support older .NET Framework applications.
+
+---
+
+## How async/await works
+
+# Question
+
+How does `async`/`await` work in .NET applications?
+
+# Senior-Level Answer
+
+`async` and `await` allow asynchronous operations to be written in a readable, sequential style without blocking the current thread.
+
+When an awaited operation is not complete, the method returns control to the caller and registers a continuation. The thread is freed to do other work. When the awaited task completes, the continuation resumes and the rest of the method executes.
+
+In ASP.NET Core, this is especially useful for I/O-bound operations such as database calls, HTTP calls, file operations, and message processing. It improves scalability because request threads are not blocked while waiting for external resources.
+
+`async`/`await` does not automatically make CPU-heavy code faster. For CPU-bound work, use background processing, queues, or dedicated worker services instead of blocking request threads.
+
+# Example
+
+```csharp
+public async Task<UserDto> GetUserAsync(int id)
+{
+    var user = await _db.Users
+        .AsNoTracking()
+        .FirstOrDefaultAsync(x => x.Id == id);
+
+    return MapToDto(user);
+}
+```
+
+The thread is not blocked while the database query is running.
+
+# 15-Second Version
+
+`await` pauses the method without blocking the thread. The thread can handle other work, and the method continues when the task completes. It is mainly for I/O-bound work like database or HTTP calls.
+
+---
+
+## Code Reusability in C#
+
+# Question
+
+How do you achieve code reusability in C#?
+
+# Senior-Level Answer
+
+Code reusability in C# is achieved by separating common behavior into reusable types and abstractions instead of duplicating logic.
+
+Common techniques include classes, methods, interfaces, abstract base classes, generics, extension methods, reusable services, shared libraries, and design patterns such as Strategy, Factory, and Decorator.
+
+Good reuse should still follow SOLID principles. For example, reusable services should have clear responsibilities, depend on abstractions, and be injected using dependency injection. Reuse should not mean creating large helper classes that become hard to maintain.
+
+# Example
+
+```csharp
+public interface INotificationSender
+{
+    Task SendAsync(string message);
+}
+
+public class EmailNotificationSender : INotificationSender
+{
+    public Task SendAsync(string message)
+    {
+        // send email
+        return Task.CompletedTask;
+    }
+}
+```
+
+Any feature that needs notification behavior can depend on `INotificationSender` instead of duplicating email logic.
+
+# 15-Second Version
+
+Use reusable methods, classes, interfaces, generics, extension methods, services, shared libraries, and design patterns. The goal is to avoid duplication while keeping responsibilities clear and testable.
+
+---
+
+## Exception Handling in Projects
+
+# Question
+
+How do you handle exceptions in your project?
+
+# Senior-Level Answer
+
+I avoid scattering `try-catch` blocks everywhere. I use centralized exception handling for unexpected errors and local `try-catch` only when I can add value, such as retrying, translating an exception, compensating an operation, or adding context.
+
+In ASP.NET Core, unexpected exceptions should be handled by middleware or `IExceptionHandler`, logged with correlation IDs, and returned as a consistent error response without exposing internal details.
+
+For expected business failures, I prefer validation results, domain errors, or controlled responses instead of throwing exceptions for normal flow. I also make sure exceptions are logged with enough context to troubleshoot production issues.
+
+# Example
+
+```csharp
+app.UseExceptionHandler("/error");
+```
+
+```csharp
+try
+{
+    await _paymentGateway.CaptureAsync(request);
+}
+catch (PaymentGatewayException ex)
+{
+    _logger.LogError(ex, "Payment capture failed for OrderId {OrderId}", request.OrderId);
+    throw;
+}
+```
+
+# 15-Second Version
+
+Use centralized exception handling for unexpected errors, local `try-catch` only when it adds value, log with context and correlation IDs, and return safe consistent error responses.
